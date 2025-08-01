@@ -1,12 +1,12 @@
 import express from "express";
 const router = express.Router();
 
-// @route  GET /api/auth
+// @route  GET /api/post
 // @desc   Test route
 // @access Public
 
 router.get("/", (req, res) => {
-  res.send("Auth route is working!");
+  res.send("Post route is working!");
 });
 
 export default router;
