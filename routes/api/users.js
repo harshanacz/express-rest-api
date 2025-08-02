@@ -4,6 +4,9 @@ import { check, validationResult } from "express-validator";
 import User from "../../models/userModel.js";
 import gravatar from "gravatar";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 // @route  POST /api/users
 // @desc   Register a new user
@@ -57,7 +60,21 @@ router.post(
       // Respond with success message
       // Return jsonwebtoken
 
-      res.send("User route is working!");
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+      jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        { expiresIn: "5 days" },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+     
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server error");
