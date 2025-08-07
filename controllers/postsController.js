@@ -1,6 +1,9 @@
 import Post from "../models/postModel.js";
-import User from "../models/user.js";
+import User from "../models/userModel.js";
 import { validationResult } from "express-validator";
+
+//class method
+
 
 class PostsController {
   // Create a new post
