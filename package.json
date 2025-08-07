@@ -1,7 +1,7 @@
 {
-  "name": "client-management-system",
+  "name": "social-media-backend",
   "version": "1.0.0",
-  "description": "A comprehensive client management system backend API",
+  "description": "A backend API for a social media platform, providing user, post, and profile management.",
   "type": "module",
   "main": "server.js",
   "scripts": {
