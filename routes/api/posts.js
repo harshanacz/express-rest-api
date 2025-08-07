@@ -1,46 +1,33 @@
 import express from "express";
+import PostsController from "../../controllers/postsController.js";
+import { authMiddleware } from "../../middleware/authMiddleware.js";
+
 const router = express.Router();
-const {check, validationResult} = require("express-validator");
-import {authMiddleware} from "../../middleware/authMiddleware.js";
-import Post from "../../models/post.js";
-import User from "../../models/user.js";
+const postsController = new PostsController();
 
-// @route  post /api/post
-// @desc   Test route
+// @route  POST /api/posts
+// @desc   Create a post
 // @access Public
+router.post("/", authMiddleware, postsController.createPost);
 
-router.post("/", [
-  authMiddleware,
-  check("title", "Title is required").not().isEmpty(),
+// @route  GET /api/posts
+// @desc   Get all posts
+// @access Public
+router.get("/", postsController.getAllPosts);
 
-], async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({errors: errors.array()});
-  }
+// @route  GET /api/posts/:id
+// @desc   Get a post by ID
+// @access Public
+router.get("/:id", postsController.getPostById);
 
-  const {title} = req.body;
+// @route  PUT /api/posts/:id
+// @desc   Update a post by ID
+// @access Public
+router.put("/:id", authMiddleware, postsController.updatePost);
 
-  try {
-   
-    const user = await User.findById(req.user.id).select("-password");
-    
-    if (!user) {
-      return res.status(404).json({msg: "User not found"});
-    }
-
-    const newPost = new Post({
-      user: req.user.id,
-      title,
-    });
-
-    await newPost.save();
-    res.json(newPost);
-
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
-  }
-});
+// @route  DELETE /api/posts/:id
+// @desc   Delete a post by ID
+// @access Public
+router.delete("/:id", authMiddleware, postsController.deletePost);
 
 export default router;
