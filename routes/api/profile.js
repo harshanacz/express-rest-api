@@ -1,12 +1,13 @@
 import express from "express";
 const router = express.Router();
-const Auth = require("../../middleware/auth");
+import Profile from "../../models/profileModel.js";
+import { authMiddleware } from "../../middleware/authMiddleware.js";
 
 // @route  GET /api/profile/me
 // @desc   Get current user's profile
 // @access Private
 
-router.get("/me", auth,async (req,  res) => {
+router.get("/me", authMiddleware,async (req,  res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id }).populate("user", ["name", "avatar"]);
     
